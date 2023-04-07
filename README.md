@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # prod_beaker
 
 This project has been generated using AlgoKit. See below for default getting started instructions.
@@ -43,3 +44,6 @@ This project makes use of Python to build Algorand smart contracts. The followin
 - [mypy](https://mypy-lang.org/): Static type checker.
 
 It has also been configured to have a productive dev experience out of the box in VS Code, see the [.vscode](./.vscode) folder.
+=======
+# algo_prod_start
+>>>>>>> c2808438064e4fdb456624072746823cd912961f
