@@ -1,0 +1,313 @@
+#pragma version 8
+intcblock 0 1
+bytecblock 0x151f7c75 0x
+txn NumAppArgs
+intc_0 // 0
+==
+bnz main_l14
+txna ApplicationArgs 0
+pushbytes 0x02bece11 // "hello(string)string"
+==
+bnz main_l13
+txna ApplicationArgs 0
+pushbytes 0x9249732b // "addString(string,string)string"
+==
+bnz main_l12
+txna ApplicationArgs 0
+pushbytes 0xcee431de // "addCalc(uint64,uint64)uint64"
+==
+bnz main_l11
+txna ApplicationArgs 0
+pushbytes 0xec0d5d33 // "subCalc(uint64,uint64)uint64"
+==
+bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0x640e1067 // "difference(uint64,uint64)uint64"
+==
+bnz main_l9
+txna ApplicationArgs 0
+pushbytes 0xa6155971 // "logger(string,string)string"
+==
+bnz main_l8
+err
+main_l8:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+store 13
+txna ApplicationArgs 2
+store 14
+load 13
+load 14
+callsub logger_5
+store 15
+bytec_0 // 0x151f7c75
+load 15
+concat
+log
+intc_1 // 1
+return
+main_l9:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+btoi
+store 10
+txna ApplicationArgs 2
+btoi
+store 11
+load 10
+load 11
+callsub difference_4
+store 12
+bytec_0 // 0x151f7c75
+load 12
+itob
+concat
+log
+intc_1 // 1
+return
+main_l10:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+btoi
+store 7
+txna ApplicationArgs 2
+btoi
+store 8
+load 7
+load 8
+callsub subCalc_3
+store 9
+bytec_0 // 0x151f7c75
+load 9
+itob
+concat
+log
+intc_1 // 1
+return
+main_l11:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+btoi
+store 4
+txna ApplicationArgs 2
+btoi
+store 5
+load 4
+load 5
+callsub addCalc_2
+store 6
+bytec_0 // 0x151f7c75
+load 6
+itob
+concat
+log
+intc_1 // 1
+return
+main_l12:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+store 1
+txna ApplicationArgs 2
+store 2
+load 1
+load 2
+callsub addString_1
+store 3
+bytec_0 // 0x151f7c75
+load 3
+concat
+log
+intc_1 // 1
+return
+main_l13:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+callsub hello_0
+store 0
+bytec_0 // 0x151f7c75
+load 0
+concat
+log
+intc_1 // 1
+return
+main_l14:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l18
+txn OnCompletion
+pushint 5 // DeleteApplication
+==
+bnz main_l17
+err
+main_l17:
+txn ApplicationID
+intc_0 // 0
+!=
+assert
+callsub delete_6
+intc_1 // 1
+return
+main_l18:
+txn ApplicationID
+intc_0 // 0
+==
+assert
+intc_1 // 1
+return
+
+// hello
+hello_0:
+proto 1 1
+bytec_1 // ""
+pushbytes 0x48656c6c6f2c20 // "Hello, "
+frame_dig -1
+extract 2 0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// addString
+addString_1:
+proto 2 1
+bytec_1 // ""
+frame_dig -2
+extract 2 0
+frame_dig -1
+extract 2 0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// addCalc
+addCalc_2:
+proto 2 1
+intc_0 // 0
+frame_dig -2
+frame_dig -1
++
+frame_bury 0
+retsub
+
+// subCalc
+subCalc_3:
+proto 2 1
+intc_0 // 0
+frame_dig -2
+frame_dig -1
+-
+frame_bury 0
+retsub
+
+// difference
+difference_4:
+proto 2 1
+intc_0 // 0
+frame_dig -2
+frame_dig -1
+>
+bnz difference_4_l2
+frame_dig -1
+frame_dig -2
+-
+frame_bury 0
+b difference_4_l3
+difference_4_l2:
+frame_dig -2
+frame_dig -1
+-
+frame_bury 0
+difference_4_l3:
+retsub
+
+// logger
+logger_5:
+proto 2 1
+bytec_1 // ""
+frame_dig -2
+extract 2 0
+log
+frame_dig -1
+extract 2 0
+log
+frame_dig -2
+extract 2 0
+frame_dig -1
+extract 2 0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// delete
+delete_6:
+proto 0 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+intc_1 // 1
+return
